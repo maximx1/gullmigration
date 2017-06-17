@@ -1,0 +1,27 @@
+{
+  "name": "gullmigration",
+  "version": "0.1.0",
+  "description": "Simple Mongodb evolution library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maximx1/gullmigration.git"
+  },
+  "keywords": [
+    "mongodb",
+    "gull",
+    "migration",
+    "evolution",
+    "database",
+    "update"
+  ],
+  "author": "maximx1 <walrathjaw@gmail.com> (http://justin.walrath.technology)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maximx1/gullmigration/issues"
+  },
+  "homepage": "https://github.com/maximx1/gullmigration#readme"
+}
