@@ -10,6 +10,14 @@
     "type": "git",
     "url": "git+https://github.com/maximx1/gullmigration.git"
   },
+  "dependencies": {
+    "mongodb": "*",
+    "bson-ext": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  },
   "keywords": [
     "mongodb",
     "gull",
