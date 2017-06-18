@@ -1,12 +1,10 @@
-var mongo = require("./mongo.js");
-
 module.exports = {
   currentVersion: 1,
 
-  migrationUpgrade: [
+  evolutionUps: [
     {
       index: 0,
-      initializeCollection: {
+      addToCollection: {
         users: [{
           name: process.env.ADMIN_USERNAME || "roger",
           password: process.env.ADMIN_PASS || "roger"
@@ -16,12 +14,12 @@ module.exports = {
     {
       index: 1,
       fieldChanges: {
-        users: [ {name: "username"} ]
+        users: { name: "username" }
       }
     }
   ],
 
-  migrationDowngrade: [
+  evolutionDowns: [
     {
       index: 0,
       deleteCollections: [ "users" ]

@@ -2,9 +2,8 @@
   "name": "gullmigration",
   "version": "0.1.0",
   "description": "Simple Mongodb evolution library.",
-  "main": "index.js",
   "scripts": {
-    "test": "mocha ./test/"
+    "test": "mocha ./test"
   },
   "repository": {
     "type": "git",
@@ -12,7 +11,8 @@
   },
   "dependencies": {
     "mongodb": "*",
-    "bson-ext": "*"
+    "bson-ext": "*",
+    "bluebird": "*"
   },
   "devDependencies": {
     "mocha": "*",
