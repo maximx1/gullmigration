@@ -1,14 +1,19 @@
-var callMongo = require("./mongo.js");
+var connectMongo = require("./mongo.js");
 
 module.exports = function(mongoUrl, migrationSteps, migrationObj) {
-  callMongo(mongoUrl, function(db) {
+  connectMongo(mongoUrl).then(function(db) {
     return db.collection("gullmigrationMeta").remove({});
-  });
-  callMongo(mongoUrl, function(db) {
-    return db.collection("gullmigrationMeta").insertAsync({currentVersion: migrationObj.currentVersion});
+  }).catch(function(err) {
+    throw err;
   });
 
-  console.log(JSON.stringify(migrationSteps));
+  connectMongo(mongoUrl).then(function(db) {
+    return db.collection("gullmigrationMeta").insert({currentVersion: migrationObj.currentVersion});
+  }).catch(function(err) {
+    throw err;
+  });
+
+  //console.log(JSON.stringify(migrationSteps));
 
   migrationSteps.forEach(function(migrationStep) {
     var evolutionUp = migrationObj.evolutionUps[migrationStep];
@@ -16,8 +21,10 @@ module.exports = function(mongoUrl, migrationSteps, migrationObj) {
     if(evolutionUp.addToCollection) {
       collectionsToAddTo = Object.keys(evolutionUp.addToCollection);
       collectionsToAddTo.forEach(function(collectionToAddTo) {
-        callMongo(mongoUrl, function(db) {
-          return db.collection(collectionToAddTo).insertAsync(evolutionUp.addToCollection[collectionToAddTo]);
+        connectMongo(mongoUrl).then(function(db) {
+          return db.collection(collectionToAddTo).insert(evolutionUp.addToCollection[collectionToAddTo]);
+        }).catch(function(err) {
+          throw err;
         });
       });
     }
@@ -25,13 +32,15 @@ module.exports = function(mongoUrl, migrationSteps, migrationObj) {
     if(evolutionUp.fieldChanges) {
       collectionsToModifyFields = Object.keys(evolutionUp.fieldChanges);
       collectionsToModifyFields.forEach(function(collectionToModifyFields) {
-        callMongo(mongoUrl, function(db) {
-          return db.collection(collectionToModifyFields).updateManyAsync(
+        connectMongo(mongoUrl).then(function(db) {
+          return db.collection(collectionToModifyFields).updateMany(
             { },
             { $rename: evolutionUp.fieldChanges[collectionToModifyFields] }
           );
+        }).catch(function(err) {
+          throw err;
         });
       });
     }
   });
-}
+};

@@ -1,9 +1,12 @@
-var callMongo = require("./mongo.js");
+var connectMongo = require("./mongo.js");
 
 module.exports = function(mongoUrl, migrationObj) {
-  return callMongo(mongoUrl, function(db) {
-    var result = db.collection("gullmigrationMeta").findOneAsync({});
-    console.log(JSON.stringify(result));
-    return result;
+  connectMongo(mongoUrl).then(function(db) {
+    return db.collection("gullmigrationMeta").findOne({});
+  }).then(function(doc) {
+    console.log(JSON.stringify(doc));
+    return doc;
+  }).catch(function(err) {
+    throw err;
   });
 };
