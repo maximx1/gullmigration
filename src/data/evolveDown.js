@@ -1,26 +1,18 @@
 var connectMongo = require("./mongo.js");
 var Promise = require('bluebird');
 
-var handleAddToCollection = function(db, evolution) {
-  return Promise.map(Object.keys(evolution.addToCollection || {}), function(collectionToAddTo) {
-    console.log("Adding to collection");
-    return db.collection(collectionToAddTo).insert(evolution.addToCollection[collectionToAddTo]);
-  });
-};
-
-var handleModifyField = function(db, evolution) {
-  return Promise.map(Object.keys(evolution.fieldChanges || {}), function(collectionToModifyFields) {
-    console.log("Modifying fields");
-    return db.collection(collectionToModifyFields).updateMany(
-      { },
-      { $rename: evolution.fieldChanges[collectionToModifyFields] }
-    );
-  });
-};
-
 var handleUp = function(db, evolutionUp) {
-  return handleAddToCollection(db, evolutionUp).then(function() {
-    return handleModifyField(db, evolutionUp);
+  return Promise.map(Object.keys(evolutionUp.addToCollection || {}), function(collectionToAddTo) {
+    console.log("Adding to collection");
+    return db.collection(collectionToAddTo).insert(evolutionUp.addToCollection[collectionToAddTo]);
+  }).then(function() {
+    return Promise.map(Object.keys(evolutionUp.fieldChanges || {}), function(collectionToModifyFields) {
+        console.log("field changes");
+        return db.collection(collectionToModifyFields).updateMany(
+          { },
+          { $rename: evolutionUp.fieldChanges[collectionToModifyFields] }
+        );
+      });
   });
 };
 
