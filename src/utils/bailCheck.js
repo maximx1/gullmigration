@@ -7,7 +7,7 @@ module.exports = {
     }
   },
   validateDBMeta: function(dbMeta, migrationObj) {
-    if(doc.currentVersion < 0 || doc.currentVersion > migrationObj.currentVersion) {
+    if(dbMeta.currentVersion < 0 || dbMeta.currentVersion > migrationObj.currentVersion) {
       console.log("Database version is out of range of migration configuration");
       process.exit(1);
     }
